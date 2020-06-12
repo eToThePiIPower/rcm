@@ -66,10 +66,11 @@ in_host=0
 version=0
 always_copy=0
 force_symlink=50
+run_hooks=0
 undotted=50
 install_args=
 
-while getopts :ChSsUuVvqot:d:B: opt; do
+while getopts :ChSsKkUuVvqot:d:B: opt; do
   case "$opt" in
     C) always_copy=1 ;;
     h) show_help ;;
@@ -81,6 +82,8 @@ while getopts :ChSsUuVvqot:d:B: opt; do
     V) version=1 ;;
     S) force_symlink=1 ;;
     s) force_symlink=0 ;;
+    K) run_hooks=0 ;;
+    k) run_hooks=1 ;;
     U) undotted=1 ;;
     u) undotted=0 ;;
     B)
@@ -102,6 +105,12 @@ fi
 
 if [ $always_copy -eq 1 ]; then
   INSTALL="$INSTALL -C"
+fi
+
+if [ $run_hooks -eq 1 ]; then
+  INSTALL="$INSTALL -k"
+elif [ $run_hooks -eq 0 ]; then
+  INSTALL="$INSTALL -K"
 fi
 
 files=""
